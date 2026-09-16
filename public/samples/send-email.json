@@ -1,0 +1,4 @@
+{
+  "action": "Send an email to the customer confirming the shipment went out this morning.",
+  "source": "skill-step"
+}
