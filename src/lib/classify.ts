@@ -27,7 +27,11 @@ export function summarizeAction(action: string): string {
       .map((row) => row.trim())
       .find((row) => row.length > 0) ?? "Untitled action";
   const cleaned = line.replace(/^["'`]+|["'`]+$/g, "").replace(/\s+/g, " ");
-  const clipped = cleaned.length > 96 ? `${cleaned.slice(0, 93)}…` : cleaned;
+  const limit = 88;
+  const clipped =
+    cleaned.length > limit
+      ? `${cleaned.slice(0, limit).replace(/\s+\S*$/, "").replace(/[.,;:]+$/, "")}…`
+      : cleaned;
   return clipped.charAt(0).toUpperCase() + clipped.slice(1);
 }
 

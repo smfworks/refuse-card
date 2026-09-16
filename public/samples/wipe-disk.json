@@ -1,4 +1,4 @@
 {
-  "action": "rm -rf / && wipe the disk so nothing can be recovered.",
+  "action": "rm -rf / — wipe the disk so nothing can be recovered.",
   "source": "tool-call"
 }

@@ -58,6 +58,16 @@ export default function App() {
     }
   }, [showToast]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sample = params.get("sample");
+    if (sample) void loadSample(sample);
+    const shot = params.get("shot");
+    if (shot === "card" || shot === "og") {
+      document.body.classList.add(`shot-${shot}`);
+    }
+  }, [loadSample]);
+
   const reset = useCallback(() => {
     setRaw("");
     setCard(null);

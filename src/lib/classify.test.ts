@@ -113,4 +113,12 @@ describe("helpers", () => {
   it("summarizes the first line", () => {
     assert.equal(summarizeAction("summarize this PDF\nmore"), "Summarize this PDF");
   });
+
+  it("does not clip mid-word", () => {
+    const long = "Summarize this PDF into five bullets for the lab notebook and then also do extra padding words here.";
+    const summary = summarizeAction(long);
+    assert.ok(summary.endsWith("…"));
+    assert.equal(/\s…$/.test(summary) || /[a-zA-Z]…$/.test(summary), true);
+    assert.equal(summary.includes("padding"), false);
+  });
 });

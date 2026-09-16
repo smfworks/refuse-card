@@ -103,14 +103,12 @@ export function StampCard({ card }: StampCardProps) {
       </div>
 
       <footer className="r-foot">
-        <div>
-          <p>Refuse Card · SMF Works</p>
-          <p className="r-link">smfworks.com</p>
-          <p className="r-motto">
-            {card ? formatStampTime(card.stampedAt) : "Heuristic demo · not advice"}
-          </p>
-        </div>
-        <p className="r-motto r-right">Judgment stays human.</p>
+        <p>Refuse Card · SMF Works</p>
+        <p className="r-link">smfworks.com</p>
+        <p className="r-motto">
+          {card ? formatStampTime(card.stampedAt) : "Heuristic demo · not advice"}
+        </p>
+        <p className="r-motto">Judgment stays human.</p>
       </footer>
     </article>
   );
