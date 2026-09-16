@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/smfworks/refuse-card/blob/main/public/schema/refuse-card.schema.json",
+  "title": "RefuseCard",
+  "description": "Input a proposed agent action (and optional precomputed verdict) so Refuse Card can print a GO / HOLD / NO stamp. Other tools can emit this shape.",
+  "$defs": {
+    "Verdict": {
+      "type": "string",
+      "enum": ["GO", "HOLD", "NO"]
+    },
+    "RefuseInput": {
+      "type": "object",
+      "required": ["action"],
+      "additionalProperties": true,
+      "properties": {
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The proposed tool call, skill step, or action line."
+        },
+        "source": {
+          "type": "string",
+          "enum": ["paste", "skill-step", "tool-call", "json"]
+        },
+        "context": {
+          "type": "string",
+          "description": "Optional extra text. Concatenate into action if the emitter has no better field."
+        },
+        "verdict": {
+          "$ref": "#/$defs/Verdict",
+          "description": "Optional precomputed verdict. When present, the printer trusts it and still renders a card."
+        },
+        "reasons": {
+          "type": "array",
+          "maxItems": 3,
+          "items": { "type": "string" }
+        },
+        "refuseLine": {
+          "type": "string",
+          "description": "Suggested line to drop into a SKILL.md refuse list."
+        },
+        "summary": {
+          "type": "string",
+          "description": "One-line action summary printed on the card."
+        }
+      }
+    },
+    "RefuseOutput": {
+      "type": "object",
+      "required": ["id", "action", "summary", "verdict", "reasons", "stampedAt", "heuristic"],
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^RC-[0-9A-F]{4}$",
+          "description": "Stamp serial printed on the card."
+        },
+        "action": { "type": "string" },
+        "summary": { "type": "string" },
+        "verdict": { "$ref": "#/$defs/Verdict" },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": { "type": "string" }
+        },
+        "refuseLine": { "type": "string" },
+        "stampedAt": { "type": "string", "format": "date-time" },
+        "ruleIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "heuristic": { "type": "boolean", "const": true },
+        "overridden": { "type": "boolean" },
+        "source": {
+          "type": "string",
+          "enum": ["paste", "skill-step", "tool-call", "json"]
+        }
+      }
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/RefuseInput" },
+    { "$ref": "#/$defs/RefuseOutput" }
+  ]
+}
