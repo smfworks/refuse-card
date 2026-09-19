@@ -5,6 +5,7 @@ interface ComposerProps {
   raw: string;
   sampleId: string | null;
   override: Verdict | "";
+  allowOverride?: boolean;
   onRawChange: (value: string) => void;
   onSample: (id: string) => void;
   onOverride: (value: Verdict | "") => void;
@@ -14,6 +15,7 @@ export function Composer({
   raw,
   sampleId,
   override,
+  allowOverride = false,
   onRawChange,
   onSample,
   onOverride,
@@ -53,6 +55,7 @@ export function Composer({
         autoComplete="off"
       />
       <div className="composer-foot">
+        {allowOverride ? (
         <label className="override">
           <span>Demo override</span>
           <select
@@ -65,6 +68,9 @@ export function Composer({
             <option value="NO">Force NO</option>
           </select>
         </label>
+        ) : (
+          <span />
+        )}
         <span>
           {raw.trim() ? `${raw.length.toLocaleString()} chars` : "Client-side only · no API"}
         </span>
