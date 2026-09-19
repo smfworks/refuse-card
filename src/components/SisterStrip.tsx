@@ -1,21 +1,51 @@
-export function SisterStrip() {
+import { KIT_NEXT, VIRAL_KIT, type ViralKitId } from "../data/kit";
+
+interface SisterStripProps {
+  current: ViralKitId;
+}
+
+export function SisterStrip({ current }: SisterStripProps) {
+  const nextIds = KIT_NEXT[current] ?? [];
+  const next = nextIds
+    .map((id) => VIRAL_KIT.find((item) => item.id === id))
+    .filter((item): item is (typeof VIRAL_KIT)[number] => Boolean(item));
+
   return (
-    <nav className="sisters" aria-label="SMF Works trilogy">
-      <a href="https://paste-to-skill.vercel.app" rel="noreferrer" target="_blank">
-        <span>01</span>
-        <strong>Paste → Skill</strong>
-        <small>what to run</small>
-      </a>
-      <span className="sisters-current">
-        <span>02</span>
-        <strong>Refuse Card</strong>
-        <small>what not to / review</small>
-      </span>
-      <a href="https://agent-receipt-green.vercel.app" rel="noreferrer" target="_blank">
-        <span>03</span>
-        <strong>Agent Receipt</strong>
-        <small>what happened</small>
-      </a>
-    </nav>
+    <div className="kit-nav">
+      <nav className="sisters" aria-label="SMF Works viral kit">
+        {VIRAL_KIT.map((item, index) => {
+          const n = String(index + 1).padStart(2, "0");
+          if (item.id === current) {
+            return (
+              <span className="sisters-current" key={item.id} aria-current="page">
+                <span>{n}</span>
+                <strong>{item.label}</strong>
+                <small>{item.blurb}</small>
+              </span>
+            );
+          }
+          return (
+            <a href={item.demo} rel="noreferrer" target="_blank" key={item.id}>
+              <span>{n}</span>
+              <strong>{item.label}</strong>
+              <small>{item.blurb}</small>
+            </a>
+          );
+        })}
+      </nav>
+      {next.length ? (
+        <p className="kit-next">
+          Next in the kit:{" "}
+          {next.map((item, index) => (
+            <span key={item.id}>
+              {index > 0 ? " · " : null}
+              <a href={item.demo} rel="noreferrer" target="_blank">
+                {item.label}
+              </a>
+            </span>
+          ))}
+        </p>
+      ) : null}
+    </div>
   );
 }

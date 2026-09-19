@@ -22,6 +22,7 @@ export default function App() {
   const [card, setCard] = useState<RefuseCard | null>(null);
   const [sampleId, setSampleId] = useState<string | null>(null);
   const [override, setOverride] = useState<Verdict | "">("");
+  const [allowOverride, setAllowOverride] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [busy, setBusy] = useState<"png" | "copy" | "share" | null>(null);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -63,6 +64,9 @@ export default function App() {
     const sample = params.get("sample");
     if (sample) void loadSample(sample);
     const shot = params.get("shot");
+    if (shot === "card" || shot === "og" || params.get("demo") === "1") {
+      setAllowOverride(true);
+    }
     if (shot === "card" || shot === "og") {
       document.body.classList.add(`shot-${shot}`);
     }
@@ -142,12 +146,13 @@ export default function App() {
     <div className="page">
       <div className="ambient" aria-hidden="true" />
       <Header />
-      <SisterStrip />
+      <SisterStrip current="refuse-card" />
       <main className="layout">
         <Composer
           raw={raw}
           sampleId={sampleId}
           override={override}
+          allowOverride={allowOverride}
           onRawChange={(value) => {
             setSampleId(null);
             setRaw(value);
